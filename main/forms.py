@@ -180,28 +180,28 @@ class AuthenticationForm(forms.Form):
 class UserEditForm(ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['fullname', 'post', 'rank', 'bdate', 'document']
+        fields = ['id','fullname', 'post', 'rank', 'bdate', 'document']
 
 
 class PassedApprovalsEditForm(ModelForm):
     class Meta:
         model = PassedApprovals
-        fields = ['fullname','result', 'why', 'attdate', 'profdate', 'approvalsname']
+        fields = ['id','fullname','result', 'why', 'attdate', 'profdate', 'approvalsname']
 
 class InitialTrainingPeriodEditForm(ModelForm):
     class Meta:
         model = InitialTrainingPeriod
-        fields = ['fullname','start', 'end']
+        fields = ['id','fullname','start', 'end']
 
 class PostEditForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['fullname','rtp', 'passdate']
+        fields = ['id','fullname','rtp', 'passdate']
 
 class GDZSEditForm(ModelForm):
     class Meta:
         model=GDZS
-        fields=['fullname','value','possible', 'why_not']
+        fields=['id','fullname','value','possible', 'why_not']
 
 class UserEditMultiForm(MultiModelForm):
     form_classes = {
@@ -211,5 +211,23 @@ class UserEditMultiForm(MultiModelForm):
         'post': PostEditForm,
         'gdzs':GDZSEditForm
     }
+    def save(self, commit=True):
+        objects = super(UserEditMultiForm, self).save(commit=False)
 
-    
+        if commit:
+            user = objects['user']
+            passedapprovals = objects['passedapprovals']
+            passedapprovals.id = user.approvals.id
+            passedapprovals.save()
+            period = objects['period']
+            period.id = user.period.id
+            period.save()
+            post = objects['post']
+            post.id = user.post.id
+            post.save()
+            gdzs = objects['gdzs']
+            gdzs.id = user.gdzs.id
+            gdzs.save()
+            user.save()
+
+        return objects

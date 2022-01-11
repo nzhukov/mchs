@@ -4,8 +4,8 @@ from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView, ArchiveIndexView, TemplateView, ListView
 from django.urls import reverse_lazy
-from .models import CustomUser
-from .forms import SignUpForm, AuthenticationForm, UserEditMultiForm
+from .models import CustomUser, Post, GDZS
+from .forms import SignUpForm, AuthenticationForm, UserEditForm, UserEditMultiForm, PostEditForm, PassedApprovalsEditForm, GDZSEditForm
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -21,7 +21,8 @@ from django.contrib.auth import (
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.shortcuts import resolve_url
-from .forms import UserEditForm
+from shapeshifter.views import MultiModelFormView
+from shapeshifter.mixins import MultiSuccessMessageMixin
 
 @login_required
 def main_page(request):
@@ -29,6 +30,24 @@ def main_page(request):
     return render(request, "main/pages/main.html", {'users':users})
 
 
+class UserUpdateView(MultiSuccessMessageMixin, MultiModelFormView):
+    form_classes = (UserEditForm, GDZSEditForm)
+    template_name = 'main/pages/user_edit.html'
+    success_url = reverse_lazy('profile')
+    success_message = 'Your profile has been updated.'
+
+    def get_instances(self):
+        instances = {
+            'userform': self.request.user,
+            'gdzsform': GDZS.objects.filter(fullname=self.request.user.id),
+        }
+
+        return instances
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['curr'] = CustomUser.objects.get(pk=self.kwargs.get('pk'))
+        return context
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -126,6 +145,8 @@ class UserEditView(UpdateView):
             'user': self.object,
             'passedapprovals': self.object.approvals,
             'period': self.object.period,
+            'post':self.object.post,
+            'gdzs': self.object.gdzs
         })
         return kwargs
 
@@ -133,7 +154,6 @@ class UserEditView(UpdateView):
         context=super().get_context_data(**kwargs)
         context['curr'] = CustomUser.objects.get(pk=self.kwargs.get('pk'))
         return context
-
 
 def profile(request):
     context = {}

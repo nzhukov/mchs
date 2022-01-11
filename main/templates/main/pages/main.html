@@ -49,7 +49,7 @@
             <p>Звание:  {% if not user.rank.value %} Неизвестно {% else %} {{ user.rank.value }} {% endif %}</p>
             <p>Подлежит аттестации ГДЗС: {% if user.gdzs.possible  %} Да {% elif user.gdzs.possible == False %} Нет {% else %} Неизвестно {% endif %}</p>
             <p>ГДЗC: {% if user.gdzs.value %} Да {% elif user.gdzs.value == False %} Нет {% else %} Неизвестно {% endif %}</p>
-            <p>{% if not user.gdzs.possible %} {{user.gdzs.why_not}} {% endif %}</p>
+            <p>{% if not user.gdzs.possible %}Почему не подлежит аттестации: {% if not user.gdzs.why_not %} Неизвестно {% else %} {{ user.gdzs.why_not }} {% endif %}{% endif %}</p>
             <p>Аттестован: {% if user.approvals.result  %} Да {% elif user.approvals.result == False %} Нет {% else %} Неизвестно {% endif %}</p>
             <p>{% if user.approvals.result == False %} Почему нет: {% if not user.approvals.why %} Неизвестно {% else %} {{user.approvals.why}} {% endif %}{% endif %}</p>
             <p>{% if user.approvals.result %} Дата аттестации: {{ user.approvals.attdate | date:'d.m.Y'}}{% endif %}</p>
