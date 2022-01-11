@@ -1,0 +1,34 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% block title %}Редактирование пользователя{% endblock title %}
+{% block link %}<link type="text/css" href="{% static 'main/css/user_edit.css' %}" rel="stylesheet">{% endblock link %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <p>{{ form.user.fullname.label }}: {{ form.user.fullname }}</p>
+  <p>{{ form.gdzs.value.label }}: {{ form.gdzs.value }}</p>
+  <p>{{ form.gdzs.possible.label }}: {{ form.gdzs.possible }}</p>
+  {% if not request.user.gdzs.possible %}
+  <p>{{ form.gdzs.why_not.label }}: {{ form.gdzs.why_not }}</p> {% endif %}
+  <p>{{ form.user.post.label }}: {{ form.user.post }}</p>
+  <p>{{ form.user.rank.label }}: {{ form.user.rank }}</p>
+  <p>{{ form.user.bdate.label }}: <input type="date" name="user-bdate" id="id_user-bdate" value="{{ curr.bdate }}"></p>
+  <p>{{ form.post.rtp.label }}: {{ form.post.rtp }}</p> 
+  <p>{{ form.post.passdate.label }}: <input type="date" name="post-passdate" id="id_post-passdate" value="{{ curr.post.passdate }}"></p>
+  <p>{{ form.user.document.label }}: {{ form.user.document }}</p>
+  <p>{{ form.passedapprovals.result.label }}: {{ form.passedapprovals.result }}</p>
+  {% if not request.user.approvals.result %}
+  <p>{{ form.passedapprovals.why.label }}: {{ form.passedapprovals.why }}</p> {% endif %}
+  <p>{{ form.passedapprovals.attdate.label }}: <input type="date" name="passedapprovals-attdate" id="id_passedapprovals-attdate" value="{{ curr.approvals.attdate }}"></p>
+  <p>{{ form.passedapprovals.profdate.label }}: <input type="date" name="passedapprovals-profdate" id="id_passedapprovals-profdate" value="{{ curr.approvals.profdate }}"></p>
+  <p>{{ form.passedapprovals.approvalsname.label }}: {{ form.passedapprovals.approvalsname }}</p>
+  <p>{{ form.period.start.label }}: <input type="date" name="period-start" id="id_period-start" value="{{ curr.period.start }}"></p>
+  <p>{{ form.period.end.label }}: <input type="date" name="period-end" id="id_period-end" value="{{ curr.period.end }}"></p>
+  {{ form.gdzs.fullname }}
+  {{ form.passedapprovals.fullname }}
+  {{ form.period.fullname }}
+  {{ form.post.fullname }}
+  <!-- <input name="gdzs-fullname" value="{{ request.user.id }}" required="" id="id_gdzs-fullname"> -->
+    <input type="submit" value="Сохранить">
+</form>
+{% endblock content %}

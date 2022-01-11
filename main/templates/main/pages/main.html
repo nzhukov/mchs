@@ -1,0 +1,78 @@
+{% extends "layout/basic.html" %}
+{% block title %}{% endblock title %}
+{% block style %}
+<style>
+    .collapsible{
+        width: 100%;
+        background-color: #0c6fb6;
+        border: 1px solid #67A3FE;
+        border-top-left-radius: 60px;
+        border-top-right-radius: 60px;
+      }
+    .collapsible a{
+        text-decoration: none;
+        color: white;
+        text-align: center;
+        font-weight: Bold;
+        cursor: pointer;
+      }
+    .active,
+    .collapsible:hover{
+        background-color: #67A3FE;
+      }
+
+    .collapsible a:hover{
+      color: #014E86;
+    }
+    .content{
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2e ease-out;
+        background-color: #0c6fb6;
+        color: white;
+      }
+</style>
+{% endblock style %}
+{% block content %}
+<h2>Главная</h2>
+<div class="row">
+    <div class="col-12">
+    {% for user in users %}
+        <button class="collapsible"><a href="{% url 'profile' pk=user.pk %}">{{ user.fullname }}</a></button>
+        <div class="content mb-3">
+            <br>
+            <p>Дата рождения: {% if not user.bdate %} Неизвестно {% else %} {{ user.bdate | date:'d.m.Y'}}{% endif %}</p>
+            <p>Должность: {% if not user.post.value %} Неизвестно {% else %} {{ user.post.value }} {% endif %}</p>
+            <p>РТП: {% if user.post.rtp  %} Да {% elif user.post.rtp == False %} Нет {% else %} Неизвестно {% endif %}</p>
+            <p>{% if user.post.rtp %} Дата сдачи на допуск: {% if not user.post.passdate %} Неизвестно {% else %} {{ user.post.passdate | date:'d.m.Y' }} {% endif %}{% endif %}</p>
+            <p>Звание:  {% if not user.rank.value %} Неизвестно {% else %} {{ user.rank.value }} {% endif %}</p>
+            <p>Подлежит аттестации ГДЗС: {% if user.gdzs.possible  %} Да {% elif user.gdzs.possible == False %} Нет {% else %} Неизвестно {% endif %}</p>
+            <p>ГДЗC: {% if user.gdzs.value %} Да {% elif user.gdzs.value == False %} Нет {% else %} Неизвестно {% endif %}</p>
+            <p>{% if not user.gdzs.possible %} {{user.gdzs.why_not}} {% endif %}</p>
+            <p>Аттестован: {% if user.approvals.result  %} Да {% elif user.approvals.result == False %} Нет {% else %} Неизвестно {% endif %}</p>
+            <p>{% if user.approvals.result == False %} Почему нет: {% if not user.approvals.why %} Неизвестно {% else %} {{user.approvals.why}} {% endif %}{% endif %}</p>
+            <p>{% if user.approvals.result %} Дата аттестации: {{ user.approvals.attdate | date:'d.m.Y'}}{% endif %}</p>
+            <p>{% if user.approvals.result %} Дата проф. осмотра: {{ user.approvals.profdate | date:'d.m.Y'}}{% endif %}</p>
+            <p>{% if user.approvals.result %} Вид аттестации: {{ user.approvals.approvalsname }}{% endif %}</p>
+            <p>Период первоначальной подготовки: {% if user.period.start and user.period.end %} {{ user.period.start | date:'d.m.Y'  }} - {{ user.period.end | date:'d.m.Y' }} {% else %} Неизвестно {% endif %}</p>
+        </div>
+    {% endfor %}
+    </div>
+  </div>
+
+
+<script>
+    let coll = document.getElementsByClassName('collapsible');
+    for (let i = 0; i < coll.length; i++){
+    coll[i].addEventListener('click', function() {
+    this.classList.toggle('active');
+    let content = this.nextElementSibling;
+    if (content.style.maxHeight) {
+    content.style.maxHeight = null;
+    }else{
+    content.style.maxHeight = content.scrollHeight + 'px'}
+    })
+    }
+</script>
+{% endblock content %}

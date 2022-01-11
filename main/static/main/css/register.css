@@ -1,0 +1,95 @@
+* {
+	box-sizing: border-box;
+  	font-family: 'Roboto', sans-serif;
+}
+
+html, body{
+	font-size: 14px;
+	background: #003E78;
+}
+
+.header{
+	height: 100px;
+}
+
+.footer{
+	height: 30px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+.copy{
+	font-size: 20px;
+	color: white;
+	text-align: left;
+}
+
+.login{
+	background: #014E86;
+	border: 10px solid #67A3FE;
+  	border-top-left-radius: 60px;
+  	border-top-right-radius: 60px;
+  	border-bottom-left-radius: 60px;
+  	border-bottom-right-radius: 60px;
+    padding-top:7%;
+	height: 350px;
+}
+
+.form-control{
+	height: 40px;
+}
+
+.name-1{
+	font-weight: Bold;
+	color: white;
+}
+
+.line{
+	height: 3px;
+	background-color: #67A3FE;
+}
+
+i{
+	color: white;
+	font-size: 30px;
+}
+
+.forget{
+	text-decoration: none;
+	color: #67A3FE;
+	font-size: 15px;
+}
+
+.button{
+	width: auto;
+	height: 30px;
+	font-size: 20px;
+	background-color: #67A3FE;
+	color: #014E86;
+	border-top-left-radius: 60px;
+	border-top-right-radius: 60px;
+	border-bottom-left-radius: 60px;
+	border-bottom-right-radius: 60px;
+	border: none;
+	text-align: center;
+}
+
+.button>a{
+	text-decoration: none;
+	color: #014E86;
+}
+
+.button>a:hover{
+	text-decoration: none;
+	color: #014E86;
+}
+
+::-webkit-scrollbar {
+	width: 0;
+  }
+.error{
+    color:white;
+    text-align: center;
+}

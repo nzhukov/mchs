@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Регистрация</title>
+        <link href="{% static 'main/css/register.css' %}" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/529800dfb4.js" crossorigin="anonymous"></script>
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <!-- CSS only -->
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <body style="background-color: #003E78 !important">
+        
+    </head>
+
+    <body>
+
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+        <header>
+            <div class="container header"></div>
+        </header>
+
+        <section class="main-frame">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col">
+                </div>
+
+                <div class="col-xxl-6 col-xl-6 cpl-lg-6 col-md-10 col-sm-10 col-xs-4">
+
+                    <form method="post" class="login">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class=col-12><h1 class="name-1 text-center">МЧС России</h1></div>
+                            <div class="col"></div>
+                            <div class="col-6 line mb-3"></div>
+                            <div class="col"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col"></div>
+                            <label for="id_email" class="col-1 col-form-label"><i class="far fa-user"></i></label>
+                            <div class="col-5">
+                            <input class="form-control" placeholder="E-mail" type="email" name="email" maxlength="64" autocapitalize="none" autocomplete="email" autofocus="" required="" id="id_email">
+                            </div>
+                            <div class="col"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col"></div>
+                            <label for="id_password" class="col-1 col-form-label"><i class="fas fa-lock"></i></label>
+                            <div class="col-5">
+                            <input class="form-control" placeholder="Пароль" type="password" name="password" autocomplete="current-password" required="" id="id_password">
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <input type="hidden" name="text" value="{{ next }}">
+
+                        <div class="row mt-3">
+                            <div class="col-3"></div>
+                            <div class="col">
+                                <button type="submit" class="button">Зарегистрироваться</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="col">
+                </div>
+
+            </div>
+
+        </div> 
+
+        </section>
+
+        <footer>
+            <div class="container footer">
+                <div class="row">
+                    <div class="col-12"><h2 class="copy"></h2></div>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+
+</html>

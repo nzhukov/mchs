@@ -1,0 +1,15 @@
+input, textarea, select{
+    background-color: white;
+    border-radius: 0.25em;  
+}
+textarea{
+    width: 250px;
+    height:30px;
+}
+p{
+    color:white;
+    font-weight: bold;
+}
+.content{
+    margin:20px;
+}
