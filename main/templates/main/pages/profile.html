@@ -19,5 +19,7 @@
     <p>{% if user.approvals.result %} Вид аттестации: {{ user.approvals.approvalsname }}{% endif %}</p>
     <p>Период первоначальной подготовки: {% if user.period.start and user.period.end %} {{ user.period.start | date:'d.m.Y'  }} - {{ user.period.end | date:'d.m.Y' }} {% else %} Неизвестно {% endif %}</p> 
 </div>
+{% if request.user.fullname == user.fullname or request.user.is_admin %}
 <button style="width:auto"class="button"><a href="{% url 'user_edit' pk=request.user.pk %}">Редактировать</a></button>
+{% endif %}
 {% endblock content %}

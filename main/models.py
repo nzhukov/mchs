@@ -5,9 +5,9 @@ from django.db.models.fields.related import ForeignKey
 
 
 class GDZS(models.Model):
-    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, related_name="name", verbose_name="ГДЗС")
-    value = models.BooleanField(null=True, blank=True)
-    possible = models.BooleanField(null=True, blank=True)
+    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, related_name="name", verbose_name="ФИО")
+    value = models.BooleanField(null=True, blank=True, verbose_name="ГДЗс")
+    possible = models.BooleanField(null=True, blank=True, verbose_name="Подлежит аттестации")
     why_not = models.ForeignKey("NoAttestation", on_delete=models.CASCADE, blank = True, null=True, verbose_name="Почему не подлежит аттестации")
 
     def __str__(self):
@@ -22,10 +22,10 @@ class GDZS(models.Model):
 
 class PassedApprovals(models.Model):
     fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE)
-    result = models.BooleanField(blank=True, null=True)
+    result = models.BooleanField(blank=True, null=True, verbose_name="Аттестован")
     why = models.CharField(max_length=60, blank=True, null=True, verbose_name="Почему не прошел аттестацию")
-    attdate = models.DateField(blank=True, null=True)
-    profdate = models.DateField(blank=True, null=True)
+    attdate = models.DateField(blank=True, null=True, verbose_name="Дата аттестации")
+    profdate = models.DateField(blank=True, null=True, verbose_name="Дата профосмотра")
     approvalsname = models.ForeignKey("Approvals", on_delete=models.CASCADE, blank = True, null = True, verbose_name="Название аттестации")
 
     def __str__(self):
@@ -47,7 +47,7 @@ class Approvals(models.Model):
         verbose_name="Вид аттестации" 
 
 class Post(models.Model):
-    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, related_name='person')
+    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, related_name='person', verbose_name="ФИО")
     value = models.CharField( max_length=30, verbose_name="Должность")
     rtp = models.BooleanField(db_column='RTP', blank=True, null=True, verbose_name="РТП")
     passdate = models.DateField(blank=True, null=True, verbose_name="Дата сдачи на пропуск")
@@ -88,7 +88,7 @@ class Rtp(models.Model):
         db_table = 'rtp'
 
 class InitialTrainingPeriod(models.Model):
-    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE)
+    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, verbose_name="ФИО")
     start = models.DateField(verbose_name="Начало первичной подготовки", null=True, blank=True)
     end = models.DateField(verbose_name="Конец первичной подготовки",  null=True, blank=True)
 
