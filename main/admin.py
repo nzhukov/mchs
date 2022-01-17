@@ -20,12 +20,22 @@ class GDZSAdmin(admin.ModelAdmin):
     list_display = ('fullname', 'value')
     list_display_links = ('fullname',)
     search_fields = ('value', 'fullname')
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('fullname', 'value')
+    list_display_links = ('fullname',)
+    search_fields = ('value', 'fullname')
+
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('start', 'end', 'fullname')
+    list_display_links = ('fullname',)
+    search_fields = ('start', 'end', 'fullname')
     
 admin.site.register(CustomUser, UserAdmin)
-admin.site.register(Post, ValueAdmin)
+admin.site.register(Post, PostAdmin)
 admin.site.register(Rank, ValueAdmin)
 admin.site.register(PassedApprovals, PassedApprovalsAdmin)
 admin.site.register(Approvals)
 admin.site.register(NoAttestation, ValueAdmin)
-admin.site.register(InitialTrainingPeriod)
+admin.site.register(InitialTrainingPeriod, PeriodAdmin)
 admin.site.register(GDZS, GDZSAdmin)

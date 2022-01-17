@@ -16,9 +16,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext, gettext_lazy as _
 from django.utils.text import capfirst
 from betterforms.multiform import MultiModelForm
+from .models import GDZS, PassedApprovals, InitialTrainingPeriod, Post
 
 UserModel = get_user_model()
-
 
 class EmailField(forms.CharField):
     def to_python(self, value):
@@ -57,6 +57,7 @@ class SignUpForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
 
 class ReadOnlyPasswordHashWidget(forms.Widget):
     template_name = 'registration/widgets/read_only_password_hash.html'
@@ -196,7 +197,7 @@ class InitialTrainingPeriodEditForm(ModelForm):
 class PostEditForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['id','fullname','rtp', 'passdate']
+        fields = ['id','fullname','rtp', 'passdate', 'value']
 
 class GDZSEditForm(ModelForm):
     class Meta:
@@ -211,23 +212,95 @@ class UserEditMultiForm(MultiModelForm):
         'post': PostEditForm,
         'gdzs':GDZSEditForm
     }
-    def save(self, commit=True):
+    def form_valid(self, commit=True):
         objects = super(UserEditMultiForm, self).save(commit=False)
 
         if commit:
             user = objects['user']
-            passedapprovals = objects['passedapprovals']
-            passedapprovals.id = user.approvals.id
-            passedapprovals.save()
-            period = objects['period']
-            period.id = user.period.id
-            period.save()
-            post = objects['post']
-            post.id = user.post.id
-            post.save()
-            gdzs = objects['gdzs']
-            gdzs.id = user.gdzs.id
-            gdzs.save()
             user.save()
+            if objects['passedapprovals'].fullname==user and user.approvals:
+                passedapprovals = objects['passedapprovals']
+                object = PassedApprovals.objects.get(fullname=user)
+                object.result = passedapprovals.result
+                if object.result == None:
+                    object.why = "Неизвестно"
+                else:
+                    object.why = passedapprovals.why
+                if object.result==False:
+                    object.attdate = None
+                    object.approvalsname = None
+                    object.profdate = None
+                else:
+                    object.attdate = passedapprovals.attdate
+                    object.profdate = passedapprovals.profdate
+                    object.approvalsname = passedapprovals.approvalsname
+                object.save()
+            else:
+                passedapprovals = objects['passedapprovals']
+                object = PassedApprovals()
+                object.fullname = user
+                object.result = passedapprovals.result
+                if object.result == None:
+                    object.why = "Неизвестно"
+                else:
+                    object.why = passedapprovals.why
+                if object.result==False:
+                    object.attdate = None
+                    object.approvalsname = None
+                    object.profdate = None
+                else:
+                    object.attdate = passedapprovals.attdate
+                    object.profdate = passedapprovals.profdate
+                    object.approvalsname = passedapprovals.approvalsname
+                object.save()
+            if objects['period'].fullname==user and user.period:
+                period = objects['period']
+                object = InitialTrainingPeriod.objects.get(fullname=user)
+                object.start = period.start
+                object.end = period.end
+                object.save()
+            else:
+                period = objects['period']
+                object =InitialTrainingPeriod()
+                object.start = period.start
+                object.end = period.end
+                object.save()
+            if user.post_id != None:
+                post = objects['post']
+                object = Post.objects.get(fullname=user)
+                object.delete()
+                post.save()
+            else:
+                post = objects['post']
+                object = Post()
+                object.fullname = user
+                object.value = post.value
+                object.rtp = post.rtp
+                if object.rtp == False:
+                    object.passdate = None    
+                else:
+                    object.passdate = post.passdate
+                object.save()
+            if objects['gdzs'].fullname==user and user.gdzs:
+                gdzs = objects['gdzs']
+                object = GDZS.objects.get(fullname=user)
+                object.value = gdzs.value
+                if object.value == True:
+                    object.possible = True
+                else:
+                    object.possible = gdzs.possible
+                object.why_not = gdzs.why_not
+                object.save()
+            else:
+                gdzs = objects['gdzs']
+                object = GDZS()
+                object.fullname = user
+                object.value = gdzs.value
+                if object.value == True:
+                    object.possible = True
+                else:
+                    object.possible = gdzs.possible
+                object.why_not = gdzs.why_not
+                object.save()
 
         return objects

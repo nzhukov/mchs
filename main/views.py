@@ -155,10 +155,6 @@ class UserEditView(UpdateView):
         context['curr'] = CustomUser.objects.get(pk=self.kwargs.get('pk'))
         return context
 
-def profile(request):
-    context = {}
-    context['user'] = CustomUser.objects.get(pk=request.user.id)
-    return render(request, "main/pages/profile.html", context)
 
 class ProfileView(DetailView):
     model = CustomUser

@@ -10,16 +10,18 @@
     <p>{% if user.post.rtp %} Дата сдачи на допуск: {% if not user.post.passdate %} Неизвестно {% else %} {{ user.post.passdate | date:'d.m.Y' }} {% endif %}{% endif %}</p>
     <p>Звание:  {% if not user.rank.value %} Неизвестно {% else %} {{ user.rank.value }} {% endif %}</p>
     <p>Подлежит аттестации ГДЗС: {% if user.gdzs.possible  %} Да {% elif user.gdzs.possible == False %} Нет {% else %} Неизвестно {% endif %}</p>
-    <p>ГДЗC: {% if user.gdzs.value %} Да {% elif user.gdzs.value == False %} Нет {% else %} Неизвестно {% endif %}</p>
-    <p>{% if not user.gdzs.possible %} {{user.gdzs.why_not}} {% endif %}</p>
+    <p>ГДЗC: {% if user.gdzs.value == True %} Да {% elif user.gdzs.value == False %} Нет {% else %} Неизвестно {% endif %}</p>
+    <p>{% if user.gdzs.possible == False %} {{user.gdzs.why_not}} {% endif %}</p>
     <p>Аттестован: {% if user.approvals.result  %} Да {% elif user.approvals.result == False %} Нет {% else %} Неизвестно {% endif %}</p>
     <p>{% if user.approvals.result == False %} Почему нет: {% if not user.approvals.why %} Неизвестно {% else %} {{user.approvals.why}} {% endif %}{% endif %}</p>
-    <p>{% if user.approvals.result %} Дата аттестации: {{ user.approvals.attdate | date:'d.m.Y'}}{% endif %}</p>
-    <p>{% if user.approvals.result %} Дата проф. осмотра: {{ user.approvals.profdate | date:'d.m.Y'}}{% endif %}</p>
+    <p>{% if user.approvals.result %} Дата аттестации: {% if user.approvals.attdate %}{{ user.approvals.attdate | date:'d.m.Y'}}{% else %}Неизвестно{% endif %}{% endif %}</p>
+    <p>{% if user.approvals.result %} Дата проф. осмотра: {% if user.approvals.profdate %}{{ user.approvals.profdate | date:'d.m.Y'}}{% else %}Неизвестно{% endif %}{% endif %}</p>
     <p>{% if user.approvals.result %} Вид аттестации: {{ user.approvals.approvalsname }}{% endif %}</p>
     <p>Период первоначальной подготовки: {% if user.period.start and user.period.end %} {{ user.period.start | date:'d.m.Y'  }} - {{ user.period.end | date:'d.m.Y' }} {% else %} Неизвестно {% endif %}</p> 
 </div>
-{% if request.user.fullname == user.fullname or request.user.is_admin %}
+{% if request.user.fullname == user.fullname%}
 <button style="width:auto"class="button"><a href="{% url 'user_edit' pk=request.user.pk %}">Редактировать</a></button>
+{% elif request.user.is_admin  %}
+<button style="width:auto"class="button"><a href="{% url 'user_edit' pk=user.pk %}">Редактировать</a></button>
 {% endif %}
 {% endblock content %}

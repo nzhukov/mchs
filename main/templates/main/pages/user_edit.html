@@ -12,18 +12,21 @@
   <p>{{ form.period.end.label }}: <input type="date" name="period-end" id="id_period-end" value="{{ curr.period.end }}"></p>
   <p>{{ form.gdzs.value.label }}: {{ form.gdzs.value }}</p>
   <p>{{ form.gdzs.possible.label }}: {{ form.gdzs.possible }}</p>
-  {% if not request.user.gdzs.possible %}
+  {% if not curr.gdzs.possible %}
   <p>{{ form.gdzs.why_not.label }}: {{ form.gdzs.why_not }}</p> {% endif %}
   <p>{{ form.user.rank.label }}: {{ form.user.rank }}</p>
-  <p>{{ form.user.post.label }}: {{ form.user.post }}</p>
-  <p>{{ form.post.rtp.label }}: {{ form.post.rtp }}</p> 
-  <p>{{ form.post.passdate.label }}: <input type="date" name="post-passdate" id="id_post-passdate" value="{{ curr.post.passdate }}"></p>
+  <p>{{ form.post.value.label }}: {{ form.post.value }}</p>
+  <p>{{ form.post.rtp.label }}: {{ form.post.rtp }}</p>
+  {% if user.post.rtp %}
+  <p>{{ form.post.passdate.label }}: <input type="date" name="post-passdate" id="id_post-passdate" value="{{ curr.post.passdate }}"></p> {% endif %}
   <p>{{ form.passedapprovals.result.label }}: {{ form.passedapprovals.result }}</p>
-  {% if not request.user.approvals.result %}
+  {% if not curr.approvals.result %}
   <p>{{ form.passedapprovals.why.label }}: {{ form.passedapprovals.why }}</p> {% endif %}
+  {% if curr.approvals.result %}
   <p>{{ form.passedapprovals.attdate.label }}: <input type="date" name="passedapprovals-attdate" id="id_passedapprovals-attdate" value="{{ curr.approvals.attdate }}"></p>
   <p>{{ form.passedapprovals.profdate.label }}: <input type="date" name="passedapprovals-profdate" id="id_passedapprovals-profdate" value="{{ curr.approvals.profdate }}"></p>
-  <p>{{ form.passedapprovals.approvalsname.label }}: {{ form.passedapprovals.approvalsname }}</p>
+  <p>{{ form.passedapprovals.approvalsname.label }}: {{ form.passedapprovals.approvalsname }}</p>{% endif %}
+  <input type="hidden" value='{{ curr.post }}' name="user-post_id" id="id_user-post_id">
   <input type="hidden" value="{{ curr.id }}" name="gdzs-fullname" required="" id="id_gdzs-fullname">
   <input type="hidden" value="{{ curr.id }}" name="passedapprovals-fullname" required="" id="id_passedapprovals-fullname">
   <input type="hidden" value="{{ curr.id }}" name="period-fullname" required="" id="id_period-fullname">

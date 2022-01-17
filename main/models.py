@@ -6,8 +6,8 @@ from django.db.models.fields.related import ForeignKey
 
 class GDZS(models.Model):
     fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, related_name="name", verbose_name="ФИО")
-    value = models.BooleanField(null=True, blank=True, verbose_name="ГДЗс")
-    possible = models.BooleanField(null=True, blank=True, verbose_name="Подлежит аттестации")
+    value = models.BooleanField(null=True, blank=True, verbose_name="ГДЗC")
+    possible = models.BooleanField(null=True, blank=True, verbose_name="Подлежит аттестации ГДЗС")
     why_not = models.ForeignKey("NoAttestation", on_delete=models.CASCADE, blank = True, null=True, verbose_name="Почему не подлежит аттестации")
 
     def __str__(self):
@@ -21,7 +21,7 @@ class GDZS(models.Model):
         verbose_name="ГДЗС" 
 
 class PassedApprovals(models.Model):
-    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE)
+    fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, verbose_name="ФИО")
     result = models.BooleanField(blank=True, null=True, verbose_name="Аттестован")
     why = models.CharField(max_length=60, blank=True, null=True, verbose_name="Почему не прошел аттестацию")
     attdate = models.DateField(blank=True, null=True, verbose_name="Дата аттестации")
@@ -29,7 +29,10 @@ class PassedApprovals(models.Model):
     approvalsname = models.ForeignKey("Approvals", on_delete=models.CASCADE, blank = True, null = True, verbose_name="Название аттестации")
 
     def __str__(self):
-        return str(self.approvalsname)
+        if self.result != None and self.approvalsname != None:
+            return str(self.approvalsname)
+        else:
+            return ("Неизвестно")
 
     class Meta:
         verbose_name_plural="Аттестации"
@@ -49,7 +52,7 @@ class Approvals(models.Model):
 class Post(models.Model):
     fullname = models.ForeignKey("CustomUser", on_delete=models.CASCADE, related_name='person', verbose_name="ФИО")
     value = models.CharField( max_length=30, verbose_name="Должность")
-    rtp = models.BooleanField(db_column='RTP', blank=True, null=True, verbose_name="РТП")
+    rtp = models.BooleanField(blank=True, null=True, verbose_name="РТП")
     passdate = models.DateField(blank=True, null=True, verbose_name="Дата сдачи на пропуск")
 
     def __str__(self):
